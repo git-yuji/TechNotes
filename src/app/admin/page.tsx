@@ -63,16 +63,16 @@ export default async function AdminPage() {
 										<p className="text-xs font-semibold text-sky-700">{note.category}</p>
 										<h3 className="mt-1 truncate font-bold text-slate-900">{note.title}</h3>
 									</div>
-									<div className="flex shrink-0 gap-3">
+									<div className="grid w-full grid-cols-3 gap-2 sm:flex sm:w-auto sm:shrink-0 sm:gap-3">
 										<Link
 											href={`/notes/${note.id}`}
-											className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+											className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 sm:px-4"
 										>
 											表示
 										</Link>
 										<Link
 											href={`/admin/notes/${note.id}/edit`}
-											className="inline-flex min-h-10 items-center justify-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+											className="inline-flex min-h-10 items-center justify-center rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 sm:px-4"
 										>
 											編集
 										</Link>
