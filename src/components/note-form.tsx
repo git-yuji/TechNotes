@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useActionState, useState, type FormEvent } from "react";
-import {
-	createNoteAction,
-	initialCreateNoteState,
-	type CreateNoteErrors,
-} from "@/app/admin/notes/new/actions";
 import { categories, type Category } from "@/data/categories";
+import {
+	initialNoteActionState,
+	type NoteActionState,
+	type NoteFormErrors,
+} from "@/lib/note-form";
 
 export type NoteFormValues = {
 	title: string;
@@ -17,9 +17,10 @@ export type NoteFormValues = {
 	memo: string;
 };
 
-type FormErrors = CreateNoteErrors;
+type FormErrors = NoteFormErrors;
 
 type NoteFormProps = {
+	action: (previousState: NoteActionState, formData: FormData) => Promise<NoteActionState>;
 	mode?: "create" | "edit";
 	initialValues?: NoteFormValues;
 	cancelHref?: string;
@@ -44,18 +45,16 @@ function normalizeTags(value: string) {
 	];
 }
 
-export function NoteForm({ mode = "create", initialValues = emptyValues, cancelHref = "/" }: NoteFormProps) {
+export function NoteForm({ action, mode = "create", initialValues = emptyValues, cancelHref = "/" }: NoteFormProps) {
 	const [values, setValues] = useState(initialValues);
 	const [errors, setErrors] = useState<FormErrors>({});
-	const [isValidated, setIsValidated] = useState(false);
-	const [createState, createAction, isPending] = useActionState(createNoteAction, initialCreateNoteState);
+	const [actionState, formAction, isPending] = useActionState(action, initialNoteActionState);
 	const normalizedTags = normalizeTags(values.tags);
 	const isEditMode = mode === "edit";
-	const displayedErrors = { ...createState.errors, ...errors };
+	const displayedErrors = { ...actionState.errors, ...errors };
 
 	function updateValue<Key extends keyof NoteFormValues>(key: Key, value: NoteFormValues[Key]) {
 		setValues((current) => ({ ...current, [key]: value }));
-		setIsValidated(false);
 
 		if (key in errors) {
 			setErrors((current) => {
@@ -87,25 +86,16 @@ export function NoteForm({ mode = "create", initialValues = emptyValues, cancelH
 
 		setErrors(nextErrors);
 
-		if (Object.keys(nextErrors).length > 0 || isEditMode) {
+		if (Object.keys(nextErrors).length > 0) {
 			event.preventDefault();
 		}
-
-		setIsValidated(isEditMode && Object.keys(nextErrors).length === 0);
 	}
 
 	return (
-		<form action={isEditMode ? undefined : createAction} onSubmit={handleSubmit} noValidate className="space-y-7">
-			{isEditMode && (
-				<div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-6 text-amber-950">
-					<p className="font-bold">現在は編集画面の確認用です</p>
-					<p className="mt-1">保存機能はまだ実装されていません。変更した内容はデータベースへ保存されません。</p>
-				</div>
-			)}
-
-			{(Object.keys(displayedErrors).length > 0 || createState.message) && (
+		<form action={formAction} onSubmit={handleSubmit} noValidate className="space-y-7">
+			{(Object.keys(displayedErrors).length > 0 || actionState.message) && (
 				<div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-900">
-					<p className="font-bold">{createState.message ?? "入力内容を確認してください"}</p>
+					<p className="font-bold">{actionState.message ?? "入力内容を確認してください"}</p>
 					{Object.keys(displayedErrors).length > 0 && (
 						<ul className="mt-2 list-disc space-y-1 pl-5">
 							{Object.values(displayedErrors).map((error) => (
@@ -113,13 +103,6 @@ export function NoteForm({ mode = "create", initialValues = emptyValues, cancelH
 							))}
 						</ul>
 					)}
-				</div>
-			)}
-
-			{isValidated && (
-				<div role="status" className="rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-900">
-					<p className="font-bold">{isEditMode ? "変更内容" : "入力内容"}に問題はありません。</p>
-					<p className="mt-1">保存処理は今後のステップで実装します。</p>
 				</div>
 			)}
 

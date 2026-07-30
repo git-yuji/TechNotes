@@ -1,5 +1,6 @@
 import { categories, type Category } from "@/data/categories";
 import { getDb } from "@/lib/db";
+import type { ValidatedNoteInput } from "@/lib/note-form";
 import type { Note } from "@/types/note";
 
 type NoteRow = {
@@ -18,14 +19,6 @@ type TagRow = {
 };
 
 type ReadRow = NoteRow | TagRow;
-
-type CreateNoteInput = {
-	title: string;
-	category: Category;
-	tags: string[];
-	content: string;
-	memo: string | null;
-};
 
 const noteSelect = `
 	SELECT
@@ -115,7 +108,7 @@ export async function getNoteById(id: number): Promise<Note | undefined> {
 	);
 }
 
-export async function createNote(input: CreateNoteInput): Promise<number> {
+export async function createNote(input: ValidatedNoteInput): Promise<number> {
 	const db = getDb();
 	const category = await db
 		.prepare("SELECT id FROM categories WHERE name = ?")
@@ -161,4 +154,51 @@ export async function createNote(input: CreateNoteInput): Promise<number> {
 	}
 
 	return insertedNote.id;
+}
+
+export async function updateNote(id: number, input: ValidatedNoteInput): Promise<boolean> {
+	if (!Number.isInteger(id) || id < 1) {
+		return false;
+	}
+
+	const db = getDb();
+	const [categoryResult, noteResult] = await db.batch<{ id: number }>([
+		db.prepare("SELECT id FROM categories WHERE name = ?").bind(input.category),
+		db.prepare("SELECT id FROM notes WHERE id = ?").bind(id),
+	]);
+	const category = categoryResult.results[0];
+	const note = noteResult.results[0];
+
+	if (!category) {
+		throw new Error("指定されたカテゴリがデータベースに存在しません。");
+	}
+
+	if (!note) {
+		return false;
+	}
+
+	if (input.tags.length > 0) {
+		await db.batch(input.tags.map((tag) => db.prepare("INSERT OR IGNORE INTO tags (name) VALUES (?)").bind(tag)));
+	}
+
+	await db.batch([
+		db
+			.prepare(`
+				UPDATE notes
+				SET title = ?, category_id = ?, content = ?, memo = ?, updated_at = CURRENT_TIMESTAMP
+				WHERE id = ?
+			`)
+			.bind(input.title, category.id, input.content, input.memo, id),
+		db.prepare("DELETE FROM note_tags WHERE note_id = ?").bind(id),
+		...input.tags.map((tag) =>
+			db
+				.prepare(`
+					INSERT INTO note_tags (note_id, tag_id)
+					SELECT ?, id FROM tags WHERE name = ?
+				`)
+				.bind(id, tag),
+		),
+	]);
+
+	return true;
 }
