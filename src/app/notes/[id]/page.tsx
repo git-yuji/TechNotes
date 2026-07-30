@@ -2,13 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MarkdownContent } from "@/components/markdown-content";
-import { getNoteById } from "@/lib/notes";
+import { getNoteById, getNoteIds } from "@/lib/notes";
 
 type NoteDetailPageProps = {
 	params: Promise<{ id: string }>;
 };
 
-export const dynamic = "force-dynamic";
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+	return getNoteIds().map((id) => ({ id }));
+}
 
 const dateFormatter = new Intl.DateTimeFormat("ja-JP", {
 	year: "numeric",
@@ -22,7 +26,7 @@ function formatDate(date: string) {
 
 export async function generateMetadata({ params }: NoteDetailPageProps): Promise<Metadata> {
 	const { id } = await params;
-	const note = await getNoteById(Number(id));
+	const note = await getNoteById(id);
 
 	if (!note) {
 		return {
@@ -38,13 +42,7 @@ export async function generateMetadata({ params }: NoteDetailPageProps): Promise
 
 export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
 	const { id } = await params;
-	const noteId = Number(id);
-
-	if (!Number.isInteger(noteId)) {
-		notFound();
-	}
-
-	const note = await getNoteById(noteId);
+	const note = await getNoteById(id);
 
 	if (!note) {
 		notFound();
@@ -66,12 +64,14 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
 						</span>
 						<span className="font-bold tracking-tight text-slate-900">Tech Notes</span>
 					</Link>
-					<Link
-						href={`/admin/notes/${note.id}/edit`}
+					<a
+						href={`https://github.com/yujihozumi/TechNotes/edit/main/${note.sourceFile}`}
+						target="_blank"
+						rel="noreferrer"
 						className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-center text-xs font-semibold text-slate-700 shadow-sm transition hover:border-sky-300 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 sm:px-4 sm:text-sm"
 					>
-						管理画面で編集
-					</Link>
+						GitHubで編集
+					</a>
 				</div>
 			</header>
 

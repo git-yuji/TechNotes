@@ -1,7 +1,7 @@
 import type { Category } from "@/data/categories";
 
 export type Note = {
-	id: number;
+	id: string;
 	title: string;
 	category: Category;
 	tags: string[];
@@ -9,4 +9,5 @@ export type Note = {
 	memo: string | null;
 	createdAt: string;
 	updatedAt: string;
+	sourceFile: string;
 };
