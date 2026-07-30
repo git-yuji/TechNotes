@@ -28,12 +28,12 @@ export function DeleteNoteButton({ noteId, noteTitle }: DeleteNoteButtonProps) {
 	}
 
 	return (
-		<div>
+		<div className="min-w-0">
 			<form action={formAction} onSubmit={handleSubmit}>
 				<button
 					type="submit"
 					disabled={isPending}
-					className="inline-flex min-h-10 items-center justify-center rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+					className="inline-flex min-h-10 w-full items-center justify-center rounded-lg border border-red-300 bg-white px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400 sm:px-4"
 				>
 					{isPending ? "削除中..." : "削除"}
 				</button>
