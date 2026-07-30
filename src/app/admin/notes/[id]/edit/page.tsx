@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { updateNoteAction } from "@/app/admin/notes/[id]/edit/actions";
 import { NoteForm, type NoteFormValues } from "@/components/note-form";
 import { getNoteById } from "@/lib/notes";
 
@@ -85,7 +86,12 @@ export default async function EditNotePage({ params }: EditNotePageProps) {
 				</div>
 
 				<section className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8" aria-label="ノート編集フォーム">
-					<NoteForm mode="edit" initialValues={initialValues} cancelHref="/admin" />
+					<NoteForm
+						action={updateNoteAction.bind(null, note.id)}
+						mode="edit"
+						initialValues={initialValues}
+						cancelHref="/admin"
+					/>
 				</section>
 			</div>
 		</main>
