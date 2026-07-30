@@ -24,10 +24,10 @@ export default async function Home() {
 						</div>
 					</div>
 					<Link
-						href="/notes/new"
-						className="inline-flex min-h-10 items-center justify-center rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+						href="/admin"
+						className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-sky-300 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
 					>
-						新しいノート
+						管理画面
 					</Link>
 				</div>
 			</header>
@@ -60,7 +60,7 @@ export default async function Home() {
 							<h2 className="text-lg font-bold text-slate-900">ノートはまだありません</h2>
 							<p className="mt-2 text-sm text-slate-600">最初の技術ノートを作成して、知識を記録しましょう。</p>
 							<Link
-								href="/notes/new"
+								href="/admin/notes/new"
 								className="mt-6 inline-flex min-h-10 items-center justify-center rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
 							>
 								ノートを作成する

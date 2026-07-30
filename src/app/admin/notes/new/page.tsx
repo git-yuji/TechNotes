@@ -4,7 +4,7 @@ import { NoteForm } from "@/components/note-form";
 
 export const metadata: Metadata = {
 	title: "ノートを新規作成 | Tech Notes",
-	description: "Tech Notesに新しい技術ノートを作成します",
+	description: "Tech Notesの管理画面から新しい技術ノートを作成します",
 };
 
 export default function NewNotePage() {
@@ -29,11 +29,11 @@ export default function NewNotePage() {
 
 			<div className="mx-auto max-w-4xl px-5 py-8 sm:px-8 sm:py-12">
 				<Link
-					href="/"
+					href="/admin"
 					className="inline-flex items-center gap-2 text-sm font-semibold text-sky-700 transition hover:text-sky-900 focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-4"
 				>
 					<span aria-hidden="true">←</span>
-					ノート一覧へ戻る
+					管理画面へ戻る
 				</Link>
 
 				<div className="mt-7">
@@ -45,7 +45,7 @@ export default function NewNotePage() {
 				</div>
 
 				<section className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8" aria-label="ノート入力フォーム">
-					<NoteForm />
+					<NoteForm cancelHref="/admin" />
 				</section>
 			</div>
 		</main>

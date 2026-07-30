@@ -67,10 +67,10 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
 						<span className="font-bold tracking-tight text-slate-900">Tech Notes</span>
 					</Link>
 					<Link
-						href={`/notes/${note.id}/edit`}
+						href={`/admin/notes/${note.id}/edit`}
 						className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-sky-300 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
 					>
-						編集する
+						管理画面で編集
 					</Link>
 				</div>
 			</header>
