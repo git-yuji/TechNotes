@@ -45,12 +45,14 @@ export default async function Home({ searchParams }: HomeProps) {
 							<p className="hidden text-xs text-slate-500 sm:block">技術知識を記録し、必要なときに再利用する</p>
 						</div>
 					</div>
-					<Link
-						href="/admin"
+					<a
+						href="https://github.com/yujihozumi/TechNotes/tree/main/content/notes"
+						target="_blank"
+						rel="noreferrer"
 						className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-sky-300 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
 					>
-						管理画面
-					</Link>
+						GitHubで管理
+					</a>
 				</div>
 			</header>
 
@@ -163,12 +165,23 @@ export default async function Home({ searchParams }: HomeProps) {
 									? "検索条件を変更するか、条件を解除してもう一度お試しください。"
 									: "最初の技術ノートを作成して、知識を記録しましょう。"}
 							</p>
-							<Link
-								href={hasFilters ? "/" : "/admin/notes/new"}
-								className="mt-6 inline-flex min-h-10 items-center justify-center rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
-							>
-								{hasFilters ? "条件を解除する" : "ノートを作成する"}
-							</Link>
+							{hasFilters ? (
+								<Link
+									href="/"
+									className="mt-6 inline-flex min-h-10 items-center justify-center rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+								>
+									条件を解除する
+								</Link>
+							) : (
+								<a
+									href="https://github.com/yujihozumi/TechNotes/tree/main/content/notes"
+									target="_blank"
+									rel="noreferrer"
+									className="mt-6 inline-flex min-h-10 items-center justify-center rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+								>
+									GitHubでノートを追加する
+								</a>
+							)}
 						</div>
 					)}
 				</section>

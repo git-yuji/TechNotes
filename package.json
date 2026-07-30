@@ -3,20 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "node scripts/generate-notes.mjs",
+    "predev": "node scripts/generate-notes.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/generate-notes.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "notes:generate": "node scripts/generate-notes.mjs",
+    "deploy": "npm run notes:generate && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "npm run notes:generate && opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "preview": "npm run notes:generate && opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts",
-    "db:migrate:local": "wrangler d1 migrations apply tech-notes-db --local",
-    "db:migrate:remote": "wrangler d1 migrations apply tech-notes-db --remote",
-    "db:seed:local": "wrangler d1 execute tech-notes-db --local --file=./seeds/seed.sql",
-    "db:seed:remote": "wrangler d1 execute tech-notes-db --remote --file=./seeds/seed.sql",
-    "notes:sync:local": "node scripts/sync-notes.mjs",
-    "notes:sync:remote": "node scripts/sync-notes.mjs --remote"
+    "notes:check": "node scripts/generate-notes.mjs"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.19.9",
