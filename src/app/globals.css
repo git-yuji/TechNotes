@@ -21,13 +21,3 @@ body {
 * {
 	box-sizing: border-box;
 }
-
-.markdown-content pre {
-	padding: 1.25rem;
-}
-
-@media (max-width: 639px) {
-	.markdown-content pre {
-		padding: 1rem;
-	}
-}
