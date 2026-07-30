@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { NoteCard } from "@/components/note-card";
-import { notes } from "@/data/notes";
+import { getNotes } from "@/lib/notes";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+	const notes = await getNotes();
+
 	return (
 		<main className="min-h-screen">
 			<header className="border-b border-slate-200 bg-white">
@@ -45,11 +49,24 @@ export default function Home() {
 						</p>
 					</div>
 
-					<div className="grid gap-5 md:grid-cols-2">
-						{notes.map((note) => (
-							<NoteCard key={note.id} note={note} />
-						))}
-					</div>
+					{notes.length > 0 ? (
+						<div className="grid gap-5 md:grid-cols-2">
+							{notes.map((note) => (
+								<NoteCard key={note.id} note={note} />
+							))}
+						</div>
+					) : (
+						<div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center">
+							<h2 className="text-lg font-bold text-slate-900">ノートはまだありません</h2>
+							<p className="mt-2 text-sm text-slate-600">最初の技術ノートを作成して、知識を記録しましょう。</p>
+							<Link
+								href="/notes/new"
+								className="mt-6 inline-flex min-h-10 items-center justify-center rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+							>
+								ノートを作成する
+							</Link>
+						</div>
+					)}
 				</section>
 			</div>
 		</main>

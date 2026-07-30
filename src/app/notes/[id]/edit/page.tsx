@@ -2,21 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { NoteForm, type NoteFormValues } from "@/components/note-form";
-import { getNoteById, notes } from "@/data/notes";
+import { getNoteById } from "@/lib/notes";
 
 type EditNotePageProps = {
 	params: Promise<{ id: string }>;
 };
 
-export function generateStaticParams() {
-	return notes.map((note) => ({
-		id: String(note.id),
-	}));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: EditNotePageProps): Promise<Metadata> {
 	const { id } = await params;
-	const note = getNoteById(Number(id));
+	const note = await getNoteById(Number(id));
 
 	if (!note) {
 		return {
@@ -38,7 +34,7 @@ export default async function EditNotePage({ params }: EditNotePageProps) {
 		notFound();
 	}
 
-	const note = getNoteById(noteId);
+	const note = await getNoteById(noteId);
 
 	if (!note) {
 		notFound();

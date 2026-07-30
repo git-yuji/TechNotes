@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MarkdownContent } from "@/components/markdown-content";
-import { getNoteById, notes } from "@/data/notes";
+import { getNoteById } from "@/lib/notes";
 
 type NoteDetailPageProps = {
 	params: Promise<{ id: string }>;
 };
+
+export const dynamic = "force-dynamic";
 
 const dateFormatter = new Intl.DateTimeFormat("ja-JP", {
 	year: "numeric",
@@ -18,15 +20,9 @@ function formatDate(date: string) {
 	return dateFormatter.format(new Date(`${date}T00:00:00+09:00`));
 }
 
-export function generateStaticParams() {
-	return notes.map((note) => ({
-		id: String(note.id),
-	}));
-}
-
 export async function generateMetadata({ params }: NoteDetailPageProps): Promise<Metadata> {
 	const { id } = await params;
-	const note = getNoteById(Number(id));
+	const note = await getNoteById(Number(id));
 
 	if (!note) {
 		return {
@@ -48,7 +44,7 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
 		notFound();
 	}
 
-	const note = getNoteById(noteId);
+	const note = await getNoteById(noteId);
 
 	if (!note) {
 		notFound();
