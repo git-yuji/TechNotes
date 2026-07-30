@@ -19,6 +19,14 @@ type TagRow = {
 
 type ReadRow = NoteRow | TagRow;
 
+type CreateNoteInput = {
+	title: string;
+	category: Category;
+	tags: string[];
+	content: string;
+	memo: string | null;
+};
+
 const noteSelect = `
 	SELECT
 		n.id,
@@ -105,4 +113,52 @@ export async function getNoteById(id: number): Promise<Note | undefined> {
 		note,
 		(tagsResult.results as TagRow[]).map((tag) => tag.name),
 	);
+}
+
+export async function createNote(input: CreateNoteInput): Promise<number> {
+	const db = getDb();
+	const category = await db
+		.prepare("SELECT id FROM categories WHERE name = ?")
+		.bind(input.category)
+		.first<{ id: number }>();
+
+	if (!category) {
+		throw new Error("指定されたカテゴリがデータベースに存在しません。");
+	}
+
+	const insertedNote = await db
+		.prepare(`
+			INSERT INTO notes (title, category_id, content, memo)
+			VALUES (?, ?, ?, ?)
+			RETURNING id
+		`)
+		.bind(input.title, category.id, input.content, input.memo)
+		.first<{ id: number }>();
+
+	if (!insertedNote) {
+		throw new Error("ノートIDを取得できませんでした。");
+	}
+
+	if (input.tags.length === 0) {
+		return insertedNote.id;
+	}
+
+	try {
+		const statements = input.tags.flatMap((tag) => [
+			db.prepare("INSERT OR IGNORE INTO tags (name) VALUES (?)").bind(tag),
+			db
+				.prepare(`
+					INSERT INTO note_tags (note_id, tag_id)
+					SELECT ?, id FROM tags WHERE name = ?
+				`)
+				.bind(insertedNote.id, tag),
+		]);
+
+		await db.batch(statements);
+	} catch (error) {
+		await db.prepare("DELETE FROM notes WHERE id = ?").bind(insertedNote.id).run();
+		throw error;
+	}
+
+	return insertedNote.id;
 }
