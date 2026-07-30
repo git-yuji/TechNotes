@@ -1,7 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type FormEvent } from "react";
+import { useActionState, useState, type FormEvent } from "react";
+import {
+	createNoteAction,
+	initialCreateNoteState,
+	type CreateNoteErrors,
+} from "@/app/admin/notes/new/actions";
 import { categories, type Category } from "@/data/categories";
 
 export type NoteFormValues = {
@@ -12,7 +17,7 @@ export type NoteFormValues = {
 	memo: string;
 };
 
-type FormErrors = Partial<Record<"title" | "category" | "content", string>>;
+type FormErrors = CreateNoteErrors;
 
 type NoteFormProps = {
 	mode?: "create" | "edit";
@@ -43,8 +48,10 @@ export function NoteForm({ mode = "create", initialValues = emptyValues, cancelH
 	const [values, setValues] = useState(initialValues);
 	const [errors, setErrors] = useState<FormErrors>({});
 	const [isValidated, setIsValidated] = useState(false);
+	const [createState, createAction, isPending] = useActionState(createNoteAction, initialCreateNoteState);
 	const normalizedTags = normalizeTags(values.tags);
 	const isEditMode = mode === "edit";
+	const displayedErrors = { ...createState.errors, ...errors };
 
 	function updateValue<Key extends keyof NoteFormValues>(key: Key, value: NoteFormValues[Key]) {
 		setValues((current) => ({ ...current, [key]: value }));
@@ -64,8 +71,6 @@ export function NoteForm({ mode = "create", initialValues = emptyValues, cancelH
 	}
 
 	function handleSubmit(event: FormEvent<HTMLFormElement>) {
-		event.preventDefault();
-
 		const nextErrors: FormErrors = {};
 
 		if (!values.title.trim()) {
@@ -81,26 +86,33 @@ export function NoteForm({ mode = "create", initialValues = emptyValues, cancelH
 		}
 
 		setErrors(nextErrors);
-		setIsValidated(Object.keys(nextErrors).length === 0);
+
+		if (Object.keys(nextErrors).length > 0 || isEditMode) {
+			event.preventDefault();
+		}
+
+		setIsValidated(isEditMode && Object.keys(nextErrors).length === 0);
 	}
 
 	return (
-		<form onSubmit={handleSubmit} noValidate className="space-y-7">
-			<div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-6 text-amber-950">
-				<p className="font-bold">{isEditMode ? "現在は編集画面の確認用です" : "現在は入力画面の確認用です"}</p>
-				<p className="mt-1">
-					保存機能はまだ実装されていません。{isEditMode ? "変更" : "入力"}した内容はデータベースへ保存されません。
-				</p>
-			</div>
+		<form action={isEditMode ? undefined : createAction} onSubmit={handleSubmit} noValidate className="space-y-7">
+			{isEditMode && (
+				<div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-6 text-amber-950">
+					<p className="font-bold">現在は編集画面の確認用です</p>
+					<p className="mt-1">保存機能はまだ実装されていません。変更した内容はデータベースへ保存されません。</p>
+				</div>
+			)}
 
-			{Object.keys(errors).length > 0 && (
+			{(Object.keys(displayedErrors).length > 0 || createState.message) && (
 				<div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-900">
-					<p className="font-bold">入力内容を確認してください</p>
-					<ul className="mt-2 list-disc space-y-1 pl-5">
-						{Object.values(errors).map((error) => (
-							<li key={error}>{error}</li>
-						))}
-					</ul>
+					<p className="font-bold">{createState.message ?? "入力内容を確認してください"}</p>
+					{Object.keys(displayedErrors).length > 0 && (
+						<ul className="mt-2 list-disc space-y-1 pl-5">
+							{Object.values(displayedErrors).map((error) => (
+								<li key={error}>{error}</li>
+							))}
+						</ul>
+					)}
 				</div>
 			)}
 
@@ -122,14 +134,14 @@ export function NoteForm({ mode = "create", initialValues = emptyValues, cancelH
 					type="text"
 					value={values.title}
 					onChange={(event) => updateValue("title", event.target.value)}
-					aria-invalid={Boolean(errors.title)}
-					aria-describedby={errors.title ? "title-error" : undefined}
+					aria-invalid={Boolean(displayedErrors.title)}
+					aria-describedby={displayedErrors.title ? "title-error" : undefined}
 					placeholder="例: Cloudflare Workersのデプロイ手順"
 					className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
 				/>
-				{errors.title && (
+				{displayedErrors.title && (
 					<p id="title-error" className="mt-2 text-sm font-medium text-red-600">
-						{errors.title}
+						{displayedErrors.title}
 					</p>
 				)}
 			</div>
@@ -144,8 +156,8 @@ export function NoteForm({ mode = "create", initialValues = emptyValues, cancelH
 					name="category"
 					value={values.category}
 					onChange={(event) => updateValue("category", event.target.value as NoteFormValues["category"])}
-					aria-invalid={Boolean(errors.category)}
-					aria-describedby={errors.category ? "category-error" : undefined}
+					aria-invalid={Boolean(displayedErrors.category)}
+					aria-describedby={displayedErrors.category ? "category-error" : undefined}
 					className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
 				>
 					<option value="">選択してください</option>
@@ -155,9 +167,9 @@ export function NoteForm({ mode = "create", initialValues = emptyValues, cancelH
 						</option>
 					))}
 				</select>
-				{errors.category && (
+				{displayedErrors.category && (
 					<p id="category-error" className="mt-2 text-sm font-medium text-red-600">
-						{errors.category}
+						{displayedErrors.category}
 					</p>
 				)}
 			</div>
@@ -202,15 +214,15 @@ export function NoteForm({ mode = "create", initialValues = emptyValues, cancelH
 					name="content"
 					value={values.content}
 					onChange={(event) => updateValue("content", event.target.value)}
-					aria-invalid={Boolean(errors.content)}
-					aria-describedby={errors.content ? "content-error" : "content-help"}
+					aria-invalid={Boolean(displayedErrors.content)}
+					aria-describedby={displayedErrors.content ? "content-error" : "content-help"}
 					placeholder={"## 見出し\n\n本文をMarkdown形式で入力します。"}
 					rows={15}
 					className="mt-2 w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 font-mono text-sm leading-7 text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
 				/>
-				{errors.content ? (
+				{displayedErrors.content ? (
 					<p id="content-error" className="mt-2 text-sm font-medium text-red-600">
-						{errors.content}
+						{displayedErrors.content}
 					</p>
 				) : (
 					<p id="content-help" className="mt-2 text-xs text-slate-500">
@@ -244,9 +256,10 @@ export function NoteForm({ mode = "create", initialValues = emptyValues, cancelH
 				</Link>
 				<button
 					type="submit"
-					className="inline-flex min-h-11 items-center justify-center rounded-xl bg-sky-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+					disabled={isPending}
+					className="inline-flex min-h-11 items-center justify-center rounded-xl bg-sky-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-400"
 				>
-					{isEditMode ? "変更を保存する" : "保存する"}
+					{isPending ? "保存中..." : isEditMode ? "変更を保存する" : "保存する"}
 				</button>
 			</div>
 		</form>

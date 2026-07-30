@@ -10,6 +10,8 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "tech-notes",
 	"main": ".open-next/worker.js",
+	"workers_dev": false,
+	"preview_urls": false,
 	"compatibility_date": "2026-07-30",
 	"compatibility_flags": [
 		"nodejs_compat",
