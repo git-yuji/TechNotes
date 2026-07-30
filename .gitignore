@@ -48,5 +48,7 @@ next-env.d.ts
 .wrangler
 .dev.vars*
 
+# generated notes
+/src/generated/
 
 !.dev.vars.example

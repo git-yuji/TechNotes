@@ -1,26 +1,33 @@
 # Tech Notes
 
-Next.js、Cloudflare Workers、Cloudflare D1で構築した個人用の技術ノートです。
+Next.jsとCloudflare Workersで公開する、Git管理の個人用技術ノートです。
+
+ノート本文は`content/notes`のMarkdownファイルだけで管理します。データベースや管理画面は使用しません。
 
 ## 開発
 
 ```sh
 npm install
-npm run db:migrate:local
 npm run dev
 ```
 
-## Gitでノートを管理する
+## ノートを追加する
 
-Gitの履歴に残したいノートは、`content/notes`へMarkdownファイルとして追加します。
+`content/notes`へ、URLに使用する英数字のファイル名でMarkdownファイルを追加します。
+
+```text
+content/notes/cloudflare-access-admin.md
+```
+
+ファイルの先頭にはfrontmatterを記載します。
 
 ```markdown
 ---
 title: ノートのタイトル
 category: 備忘録
 tags: ["GitHub", "Git"]
-createdAt: 2025-07-30
-updatedAt: 2025-07-30
+createdAt: 2026-07-31
+updatedAt: 2026-07-31
 memo: 任意のメモ
 ---
 # 本文
@@ -33,42 +40,27 @@ memo: 任意のメモ
 - `トラブルシューティング`
 - `備忘録`
 
-ローカルD1へ同期します。
+ノートを追加・変更したら、生成とビルドを確認します。
 
 ```sh
-npm run db:migrate:local
-npm run notes:sync:local
+npm run notes:generate
+npm run build
 ```
 
-本番D1へ同期する場合は、先にマイグレーションを適用します。
-
-```sh
-npm run db:migrate:remote
-npm run notes:sync:remote
-```
-
-同じMarkdownファイルを再度同期すると、対応するノートが更新されます。Markdownファイルを削除しても、D1のノートは自動削除されません。
+## 公開する
 
 ノートの追加・変更は機能ブランチでコミットし、PRを`main`へマージします。
 
-## 本番D1への自動同期
+CloudflareのGit連携による通常のデプロイが完了すると、本番サイトへ反映されます。D1同期用のGitHub ActionsやCloudflare APIトークンは使用しません。
 
-`main`へ次のファイルに関する変更がマージされると、GitHub Actionsがマイグレーションとノート同期を自動実行します。
+## URL
 
-- `content/notes/**`
-- `migrations/**`
-- `scripts/sync-notes.mjs`
-- `package.json`
-- `package-lock.json`
-- `wrangler.jsonc`
+Markdownのファイル名がノートのURLになります。
 
-初回のみ、GitHubリポジトリの「Settings」→「Secrets and variables」→「Actions」から、次のRepository secretsを登録します。
+```text
+content/notes/cloudflare-access-admin.md
+↓
+/notes/cloudflare-access-admin
+```
 
-| Secret名 | 内容 |
-| --- | --- |
-| `CLOUDFLARE_API_TOKEN` | 対象アカウントのD1編集権限を持つCloudflare APIトークン |
-| `CLOUDFLARE_ACCOUNT_ID` | 対象のCloudflareアカウントID |
-
-APIトークンやアカウントIDをソースコードへ直接記載しないでください。
-
-自動同期は`main`へのマージ時だけ実行されます。機能ブランチへのプッシュでは本番D1を変更しません。必要な場合はGitHub Actionsの画面から手動実行もできます。
+公開後のURLを維持するため、公開済みMarkdownのファイル名は原則として変更しません。
