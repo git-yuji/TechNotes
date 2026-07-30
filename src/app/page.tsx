@@ -32,7 +32,7 @@ export default async function Home({ searchParams }: HomeProps) {
 	return (
 		<main className="min-h-screen">
 			<header className="border-b border-slate-200 bg-white">
-				<div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-5 sm:px-8">
+				<div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-5 sm:px-8">
 					<div className="flex items-center gap-3">
 						<div
 							className="grid size-10 place-items-center rounded-xl bg-sky-700 text-sm font-bold tracking-tight text-white shadow-sm"
@@ -45,14 +45,6 @@ export default async function Home({ searchParams }: HomeProps) {
 							<p className="hidden text-xs text-slate-500 sm:block">技術知識を記録し、必要なときに再利用する</p>
 						</div>
 					</div>
-					<a
-						href="https://github.com/yujihozumi/TechNotes/tree/main/content/notes"
-						target="_blank"
-						rel="noreferrer"
-						className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-sky-300 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
-					>
-						GitHubで管理
-					</a>
 				</div>
 			</header>
 
