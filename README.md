@@ -50,3 +50,25 @@ npm run notes:sync:remote
 同じMarkdownファイルを再度同期すると、対応するノートが更新されます。Markdownファイルを削除しても、D1のノートは自動削除されません。
 
 ノートの追加・変更は機能ブランチでコミットし、PRを`main`へマージします。
+
+## 本番D1への自動同期
+
+`main`へ次のファイルに関する変更がマージされると、GitHub Actionsがマイグレーションとノート同期を自動実行します。
+
+- `content/notes/**`
+- `migrations/**`
+- `scripts/sync-notes.mjs`
+- `package.json`
+- `package-lock.json`
+- `wrangler.jsonc`
+
+初回のみ、GitHubリポジトリの「Settings」→「Secrets and variables」→「Actions」から、次のRepository secretsを登録します。
+
+| Secret名 | 内容 |
+| --- | --- |
+| `CLOUDFLARE_API_TOKEN` | 対象アカウントのD1編集権限を持つCloudflare APIトークン |
+| `CLOUDFLARE_ACCOUNT_ID` | 対象のCloudflareアカウントID |
+
+APIトークンやアカウントIDをソースコードへ直接記載しないでください。
+
+自動同期は`main`へのマージ時だけ実行されます。機能ブランチへのプッシュでは本番D1を変更しません。必要な場合はGitHub Actionsの画面から手動実行もできます。
