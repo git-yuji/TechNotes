@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { categories, type Category } from "@/data/categories";
 
-type FormValues = {
+export type NoteFormValues = {
 	title: string;
 	category: "" | Category;
 	tags: string;
@@ -14,7 +14,13 @@ type FormValues = {
 
 type FormErrors = Partial<Record<"title" | "category" | "content", string>>;
 
-const initialValues: FormValues = {
+type NoteFormProps = {
+	mode?: "create" | "edit";
+	initialValues?: NoteFormValues;
+	cancelHref?: string;
+};
+
+const emptyValues: NoteFormValues = {
 	title: "",
 	category: "",
 	tags: "",
@@ -33,13 +39,14 @@ function normalizeTags(value: string) {
 	];
 }
 
-export function NoteForm() {
+export function NoteForm({ mode = "create", initialValues = emptyValues, cancelHref = "/" }: NoteFormProps) {
 	const [values, setValues] = useState(initialValues);
 	const [errors, setErrors] = useState<FormErrors>({});
 	const [isValidated, setIsValidated] = useState(false);
 	const normalizedTags = normalizeTags(values.tags);
+	const isEditMode = mode === "edit";
 
-	function updateValue<Key extends keyof FormValues>(key: Key, value: FormValues[Key]) {
+	function updateValue<Key extends keyof NoteFormValues>(key: Key, value: NoteFormValues[Key]) {
 		setValues((current) => ({ ...current, [key]: value }));
 		setIsValidated(false);
 
@@ -80,8 +87,10 @@ export function NoteForm() {
 	return (
 		<form onSubmit={handleSubmit} noValidate className="space-y-7">
 			<div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-6 text-amber-950">
-				<p className="font-bold">現在は入力画面の確認用です</p>
-				<p className="mt-1">保存機能はまだ実装されていません。入力した内容はデータベースへ保存されません。</p>
+				<p className="font-bold">{isEditMode ? "現在は編集画面の確認用です" : "現在は入力画面の確認用です"}</p>
+				<p className="mt-1">
+					保存機能はまだ実装されていません。{isEditMode ? "変更" : "入力"}した内容はデータベースへ保存されません。
+				</p>
 			</div>
 
 			{Object.keys(errors).length > 0 && (
@@ -97,7 +106,7 @@ export function NoteForm() {
 
 			{isValidated && (
 				<div role="status" className="rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-900">
-					<p className="font-bold">入力内容に問題はありません。</p>
+					<p className="font-bold">{isEditMode ? "変更内容" : "入力内容"}に問題はありません。</p>
 					<p className="mt-1">保存処理は今後のステップで実装します。</p>
 				</div>
 			)}
@@ -134,7 +143,7 @@ export function NoteForm() {
 					id="category"
 					name="category"
 					value={values.category}
-					onChange={(event) => updateValue("category", event.target.value as FormValues["category"])}
+					onChange={(event) => updateValue("category", event.target.value as NoteFormValues["category"])}
 					aria-invalid={Boolean(errors.category)}
 					aria-describedby={errors.category ? "category-error" : undefined}
 					className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
@@ -228,7 +237,7 @@ export function NoteForm() {
 
 			<div className="flex flex-col-reverse gap-3 border-t border-slate-200 pt-7 sm:flex-row sm:justify-end">
 				<Link
-					href="/"
+					href={cancelHref}
 					className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
 				>
 					キャンセル
@@ -237,7 +246,7 @@ export function NoteForm() {
 					type="submit"
 					className="inline-flex min-h-11 items-center justify-center rounded-xl bg-sky-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
 				>
-					保存する
+					{isEditMode ? "変更を保存する" : "保存する"}
 				</button>
 			</div>
 		</form>
