@@ -7,7 +7,7 @@ type MarkdownContentProps = {
 
 export function MarkdownContent({ content }: MarkdownContentProps) {
 	return (
-		<div className="min-w-0 break-words text-[15px] leading-8 text-slate-700 sm:text-base">
+		<div className="markdown-content min-w-0 break-words text-[15px] leading-8 text-slate-700 sm:text-base">
 			<ReactMarkdown
 				remarkPlugins={[remarkGfm]}
 				components={{
