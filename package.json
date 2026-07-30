@@ -14,7 +14,9 @@
     "db:migrate:local": "wrangler d1 migrations apply tech-notes-db --local",
     "db:migrate:remote": "wrangler d1 migrations apply tech-notes-db --remote",
     "db:seed:local": "wrangler d1 execute tech-notes-db --local --file=./seeds/seed.sql",
-    "db:seed:remote": "wrangler d1 execute tech-notes-db --remote --file=./seeds/seed.sql"
+    "db:seed:remote": "wrangler d1 execute tech-notes-db --remote --file=./seeds/seed.sql",
+    "notes:sync:local": "node scripts/sync-notes.mjs",
+    "notes:sync:remote": "node scripts/sync-notes.mjs --remote"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.19.9",

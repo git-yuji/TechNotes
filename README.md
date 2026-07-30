@@ -1,48 +1,52 @@
-# OpenNext Starter
+# Tech Notes
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Next.js、Cloudflare Workers、Cloudflare D1で構築した個人用の技術ノートです。
 
-## Getting Started
+## 開発
 
-Read the documentation at https://opennext.js.org/cloudflare.
-
-## Develop
-
-Run the Next.js development server:
-
-```bash
+```sh
+npm install
+npm run db:migrate:local
 npm run dev
-# or similar package manager command
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Gitでノートを管理する
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Gitの履歴に残したいノートは、`content/notes`へMarkdownファイルとして追加します。
 
-## Preview
-
-Preview the application locally on the Cloudflare runtime:
-
-```bash
-npm run preview
-# or similar package manager command
+```markdown
+---
+title: ノートのタイトル
+category: 備忘録
+tags: ["GitHub", "Git"]
+createdAt: 2025-07-30
+updatedAt: 2025-07-30
+memo: 任意のメモ
+---
+# 本文
 ```
 
-## Deploy
+利用できるカテゴリは次の4つです。
 
-Deploy the application to Cloudflare:
+- `学習`
+- `設定手順`
+- `トラブルシューティング`
+- `備忘録`
 
-```bash
-npm run deploy
-# or similar package manager command
+ローカルD1へ同期します。
+
+```sh
+npm run db:migrate:local
+npm run notes:sync:local
 ```
 
-## Learn More
+本番D1へ同期する場合は、先にマイグレーションを適用します。
 
-To learn more about Next.js, take a look at the following resources:
+```sh
+npm run db:migrate:remote
+npm run notes:sync:remote
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+同じMarkdownファイルを再度同期すると、対応するノートが更新されます。Markdownファイルを削除しても、D1のノートは自動削除されません。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-# TechNotes
+ノートの追加・変更は機能ブランチでコミットし、PRを`main`へマージします。
