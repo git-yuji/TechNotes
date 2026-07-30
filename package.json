@@ -16,7 +16,9 @@
     "@opennextjs/cloudflare": "^1.19.9",
     "next": "16.2.11",
     "react": "^19.1.7",
-    "react-dom": "^19.1.7"
+    "react-dom": "^19.1.7",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
