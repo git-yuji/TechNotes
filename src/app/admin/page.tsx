@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DeleteNoteButton } from "@/components/delete-note-button";
 import { getNotes } from "@/lib/notes";
 
 export const metadata: Metadata = {
@@ -75,6 +76,7 @@ export default async function AdminPage() {
 										>
 											編集
 										</Link>
+										<DeleteNoteButton noteId={note.id} noteTitle={note.title} />
 									</div>
 								</li>
 							))}

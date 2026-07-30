@@ -202,3 +202,16 @@ export async function updateNote(id: number, input: ValidatedNoteInput): Promise
 
 	return true;
 }
+
+export async function deleteNote(id: number): Promise<boolean> {
+	if (!Number.isInteger(id) || id < 1) {
+		return false;
+	}
+
+	const deletedNote = await getDb()
+		.prepare("DELETE FROM notes WHERE id = ? RETURNING id")
+		.bind(id)
+		.first<{ id: number }>();
+
+	return Boolean(deletedNote);
+}
