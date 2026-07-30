@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { updateNoteAction } from "@/app/admin/notes/[id]/edit/actions";
+import { DeleteNoteButton } from "@/components/delete-note-button";
 import { NoteForm, type NoteFormValues } from "@/components/note-form";
 import { getNoteById } from "@/lib/notes";
 
@@ -92,6 +93,20 @@ export default async function EditNotePage({ params }: EditNotePageProps) {
 						initialValues={initialValues}
 						cancelHref="/admin"
 					/>
+				</section>
+
+				<section className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-5 sm:p-6" aria-labelledby="delete-note-heading">
+					<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+						<div>
+							<h2 id="delete-note-heading" className="font-bold text-red-950">
+								ノートを削除
+							</h2>
+							<p className="mt-1 text-sm leading-6 text-red-800">
+								削除したノートは元に戻せません。内容を確認してから実行してください。
+							</p>
+						</div>
+						<DeleteNoteButton noteId={note.id} noteTitle={note.title} />
+					</div>
 				</section>
 			</div>
 		</main>
