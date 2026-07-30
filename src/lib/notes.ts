@@ -20,6 +20,12 @@ type TagRow = {
 
 type ReadRow = NoteRow | TagRow;
 
+export type NoteFilters = {
+	keyword?: string;
+	category?: Category;
+	tag?: string;
+};
+
 const noteSelect = `
 	SELECT
 		n.id,
@@ -55,10 +61,50 @@ function toNote(row: NoteRow, tags: string[]): Note {
 	};
 }
 
-export async function getNotes(): Promise<Note[]> {
+function escapeLike(value: string) {
+	return value.replace(/[\\%_]/g, "\\$&");
+}
+
+export async function getNotes(filters: NoteFilters = {}): Promise<Note[]> {
 	const db = getDb();
+	const conditions: string[] = [];
+	const values: string[] = [];
+
+	if (filters.keyword) {
+		const keyword = `%${escapeLike(filters.keyword)}%`;
+		conditions.push(`
+			(
+				n.title LIKE ? ESCAPE '\\'
+				OR n.content LIKE ? ESCAPE '\\'
+				OR COALESCE(n.memo, '') LIKE ? ESCAPE '\\'
+			)
+		`);
+		values.push(keyword, keyword, keyword);
+	}
+
+	if (filters.category) {
+		conditions.push("c.name = ?");
+		values.push(filters.category);
+	}
+
+	if (filters.tag) {
+		conditions.push(`
+			EXISTS (
+				SELECT 1
+				FROM note_tags AS filter_nt
+				INNER JOIN tags AS filter_t ON filter_t.id = filter_nt.tag_id
+				WHERE filter_nt.note_id = n.id AND filter_t.name = ?
+			)
+		`);
+		values.push(filters.tag);
+	}
+
+	const whereClause = conditions.length > 0 ? ` WHERE ${conditions.join(" AND ")}` : "";
+	const notesStatement = db.prepare(
+		`${noteSelect}${whereClause} ORDER BY datetime(n.updated_at) DESC, n.id DESC`,
+	);
 	const [notesResult, tagsResult] = await db.batch<ReadRow>([
-		db.prepare(`${noteSelect} ORDER BY datetime(n.updated_at) DESC, n.id DESC`),
+		values.length > 0 ? notesStatement.bind(...values) : notesStatement,
 		db.prepare(`
 			SELECT nt.note_id AS noteId, t.name
 			FROM note_tags AS nt
@@ -76,6 +122,19 @@ export async function getNotes(): Promise<Note[]> {
 	}
 
 	return (notesResult.results as NoteRow[]).map((note) => toNote(note, tagsByNoteId.get(note.id) ?? []));
+}
+
+export async function getAvailableTags(): Promise<string[]> {
+	const result = await getDb()
+		.prepare(`
+			SELECT DISTINCT t.name
+			FROM tags AS t
+			INNER JOIN note_tags AS nt ON nt.tag_id = t.id
+			ORDER BY t.name
+		`)
+		.all<{ name: string }>();
+
+	return result.results.map((tag) => tag.name);
 }
 
 export async function getNoteById(id: number): Promise<Note | undefined> {
