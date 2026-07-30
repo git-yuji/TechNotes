@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { NoteCard } from "@/components/note-card";
 import { notes } from "@/data/notes";
 
@@ -5,17 +6,25 @@ export default function Home() {
 	return (
 		<main className="min-h-screen">
 			<header className="border-b border-slate-200 bg-white">
-				<div className="mx-auto flex max-w-6xl items-center gap-3 px-5 py-5 sm:px-8">
-					<div
-						className="grid size-10 place-items-center rounded-xl bg-sky-700 text-sm font-bold tracking-tight text-white shadow-sm"
-						aria-hidden="true"
+				<div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-5 sm:px-8">
+					<div className="flex items-center gap-3">
+						<div
+							className="grid size-10 place-items-center rounded-xl bg-sky-700 text-sm font-bold tracking-tight text-white shadow-sm"
+							aria-hidden="true"
+						>
+							TN
+						</div>
+						<div>
+							<p className="text-lg font-bold tracking-tight text-slate-900">Tech Notes</p>
+							<p className="hidden text-xs text-slate-500 sm:block">技術知識を記録し、必要なときに再利用する</p>
+						</div>
+					</div>
+					<Link
+						href="/notes/new"
+						className="inline-flex min-h-10 items-center justify-center rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
 					>
-						TN
-					</div>
-					<div>
-						<p className="text-lg font-bold tracking-tight text-slate-900">Tech Notes</p>
-						<p className="text-xs text-slate-500">技術知識を記録し、必要なときに再利用する</p>
-					</div>
+						新しいノート
+					</Link>
 				</div>
 			</header>
 
