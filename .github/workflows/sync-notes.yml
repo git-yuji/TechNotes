@@ -1,0 +1,57 @@
+name: D1へノートを同期
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "content/notes/**"
+      - "migrations/**"
+      - "scripts/sync-notes.mjs"
+      - "package.json"
+      - "package-lock.json"
+      - "wrangler.jsonc"
+      - ".github/workflows/sync-notes.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-d1-note-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: 本番D1へ同期
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+    steps:
+      - name: リポジトリを取得
+        uses: actions/checkout@v4
+
+      - name: Node.jsを準備
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: 依存パッケージをインストール
+        run: npm ci
+
+      - name: Cloudflare認証情報を確認
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::CLOUDFLARE_API_TOKENとCLOUDFLARE_ACCOUNT_IDをRepository secretsへ登録してください。"
+            exit 1
+          fi
+
+      - name: 本番D1へマイグレーションを適用
+        run: npm run db:migrate:remote
+
+      - name: 本番D1へノートを同期
+        run: npm run notes:sync:remote
