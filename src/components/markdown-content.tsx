@@ -7,7 +7,7 @@ type MarkdownContentProps = {
 
 export function MarkdownContent({ content }: MarkdownContentProps) {
 	return (
-		<div className="min-w-0 break-words text-[15px] leading-8 text-slate-700 sm:text-base">
+		<div className="markdown-content min-w-0 break-words text-[15px] leading-8 text-slate-700 sm:text-base">
 			<ReactMarkdown
 				remarkPlugins={[remarkGfm]}
 				components={{
@@ -48,7 +48,10 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
 							</code>
 						),
 					pre: ({ children }) => (
-						<pre className="my-6 max-w-full overflow-x-auto rounded-xl bg-slate-950 p-4 font-mono text-sm leading-6 text-slate-100 shadow-inner sm:p-5">
+						<pre
+							className="my-6 max-w-full overflow-x-auto rounded-xl bg-slate-950 font-mono text-sm leading-6 text-slate-100 shadow-inner"
+							style={{ padding: "1.25rem 1.5rem" }}
+						>
 							{children}
 						</pre>
 					),
