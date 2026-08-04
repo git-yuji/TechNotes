@@ -35,7 +35,7 @@
 ### セットアップ
 
 ```sh
-git clone git@github.com:yujihozumi/TechNotes.git
+git clone git@github.com:git-yuji/TechNotes.git
 cd TechNotes
 npm install
 npm run dev
