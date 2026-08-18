@@ -35,7 +35,10 @@ export async function generateMetadata({ params }: NoteDetailPageProps): Promise
 
 	return {
 		title: `${note.title} | Tech Notes`,
-		description: `${note.category}に関する技術ノート`,
+		description: note.memo ?? `${note.category}に関する技術ノート`,
+		alternates: {
+			canonical: `/notes/${note.id}`,
+		},
 	};
 }
 
