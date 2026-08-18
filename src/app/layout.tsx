@@ -13,8 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+	metadataBase: new URL("https://notes.yuyu-web.com"),
 	title: "Tech Notes",
 	description: "学習内容や設定手順、トラブル対応を蓄積する技術ナレッジ管理アプリ",
+	alternates: {
+		canonical: "/",
+	},
 };
 
 export default function RootLayout({
