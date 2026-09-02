@@ -88,17 +88,25 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
 
 				<article className="mt-7">
 					<header className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-						<span className="inline-flex rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
+						<Link
+							href={{ pathname: "/", query: { category: note.category } }}
+							className="inline-flex rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700 outline-none transition hover:bg-sky-100 hover:text-sky-900 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+						>
 							{note.category}
-						</span>
+						</Link>
 						<h1 className="mt-5 text-3xl font-bold leading-tight tracking-tight text-slate-950 sm:text-4xl">
 							{note.title}
 						</h1>
 
 						<ul className="mt-6 flex flex-wrap gap-2" aria-label="タグ">
 							{note.tags.map((tag) => (
-								<li key={tag} className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
-									#{tag}
+								<li key={tag}>
+									<Link
+										href={{ pathname: "/", query: { tag } }}
+										className="inline-flex rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 outline-none transition hover:bg-sky-100 hover:text-sky-800 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+									>
+										#{tag}
+									</Link>
 								</li>
 							))}
 						</ul>
