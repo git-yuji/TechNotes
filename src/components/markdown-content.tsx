@@ -1,28 +1,54 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CodeBlock } from "@/components/code-block";
+import { TableOfContents } from "@/components/table-of-contents";
+import { extractMarkdownHeadings, type MarkdownHeading } from "@/lib/markdown-headings";
 
 type MarkdownContentProps = {
 	content: string;
 };
 
 export function MarkdownContent({ content }: MarkdownContentProps) {
+	const headings = extractMarkdownHeadings(content);
+	const headingsByOffset = new Map(headings.map((heading) => [heading.offset, heading]));
+
 	return (
-		<div className="markdown-content min-w-0 break-words text-[15px] leading-8 text-slate-700 sm:text-base">
-			<ReactMarkdown
-				remarkPlugins={[remarkGfm]}
-				components={{
+		<>
+			<TableOfContents headings={headings} />
+			<div
+				className={`markdown-content min-w-0 break-words text-[15px] leading-8 text-slate-700 sm:text-base ${headings.length > 0 ? "mt-8" : ""}`}
+			>
+				<ReactMarkdown
+					remarkPlugins={[remarkGfm]}
+					components={{
 					h1: ({ children }) => (
 						<h1 className="mb-5 mt-10 border-b border-slate-200 pb-3 text-2xl font-bold tracking-tight text-slate-950 first:mt-0 sm:text-3xl">
 							{children}
 						</h1>
 					),
-					h2: ({ children }) => (
-						<h2 className="mb-4 mt-10 border-b border-slate-200 pb-3 text-xl font-bold tracking-tight text-slate-950 first:mt-0 sm:text-2xl">
-							{children}
-						</h2>
-					),
-					h3: ({ children }) => <h3 className="mb-3 mt-8 text-lg font-bold text-slate-900">{children}</h3>,
+					h2: ({ children, node }) => {
+						const heading = headingsByOffset.get(node?.position?.start.offset ?? -1);
+
+						return (
+							<h2
+								id={heading?.id}
+								className="group mb-4 mt-10 scroll-mt-6 border-b border-slate-200 pb-3 text-xl font-bold tracking-tight text-slate-950 first:mt-0 sm:text-2xl"
+							>
+								{children}
+								{heading && <HeadingLink heading={heading} />}
+							</h2>
+						);
+					},
+					h3: ({ children, node }) => {
+						const heading = headingsByOffset.get(node?.position?.start.offset ?? -1);
+
+						return (
+							<h3 id={heading?.id} className="group mb-3 mt-8 scroll-mt-6 text-lg font-bold text-slate-900">
+								{children}
+								{heading && <HeadingLink heading={heading} />}
+							</h3>
+						);
+					},
 					p: ({ children }) => <p className="my-4">{children}</p>,
 					strong: ({ children }) => <strong className="font-bold text-slate-950">{children}</strong>,
 					ul: ({ children }) => <ul className="my-4 list-disc space-y-1 pl-6 marker:text-sky-600">{children}</ul>,
@@ -68,10 +94,24 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
 							loading="lazy"
 						/>
 					),
-				}}
-			>
-				{content}
-			</ReactMarkdown>
-		</div>
+					}}
+				>
+					{content}
+				</ReactMarkdown>
+			</div>
+		</>
+	);
+}
+
+function HeadingLink({ heading }: { heading: Pick<MarkdownHeading, "id" | "text"> }) {
+	return (
+		<a
+			href={`#${heading.id}`}
+			className="ml-2 inline-block rounded text-slate-300 no-underline opacity-60 transition hover:text-sky-600 hover:opacity-100 focus-visible:text-sky-600 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 sm:opacity-0 sm:group-hover:opacity-100"
+			aria-label={`${heading.text}へのリンク`}
+			title="この見出しへのリンク"
+		>
+			<span aria-hidden="true">#</span>
+		</a>
 	);
 }
