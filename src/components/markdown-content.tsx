@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { CodeBlock } from "@/components/code-block";
 
 type MarkdownContentProps = {
 	content: string;
@@ -47,14 +48,7 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
 								{children}
 							</code>
 						),
-					pre: ({ children }) => (
-						<pre
-							className="my-6 max-w-full overflow-x-auto rounded-xl bg-slate-950 font-mono text-sm leading-6 text-slate-100 shadow-inner"
-							style={{ padding: "1.25rem 1.5rem" }}
-						>
-							{children}
-						</pre>
-					),
+					pre: ({ children }) => <CodeBlock>{children}</CodeBlock>,
 					table: ({ children }) => (
 						<div className="my-6 overflow-x-auto">
 							<table className="w-full min-w-lg border-collapse text-left text-sm">{children}</table>
