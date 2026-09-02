@@ -16,9 +16,12 @@ export function NoteCard({ note }: NoteCardProps) {
 	return (
 		<article className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-md sm:p-6">
 			<div className="mb-5">
-				<span className="inline-flex rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
+				<Link
+					href={{ pathname: "/", query: { category: note.category } }}
+					className="inline-flex rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700 outline-none transition hover:bg-sky-100 hover:text-sky-900 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+				>
 					{note.category}
-				</span>
+				</Link>
 			</div>
 
 			<h2 className="text-lg font-bold leading-7 tracking-tight text-slate-900 sm:text-xl">
@@ -32,8 +35,13 @@ export function NoteCard({ note }: NoteCardProps) {
 
 			<ul className="mt-5 flex flex-wrap gap-2" aria-label="タグ">
 				{note.tags.map((tag) => (
-					<li key={tag} className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
-						#{tag}
+					<li key={tag}>
+						<Link
+							href={{ pathname: "/", query: { tag } }}
+							className="inline-flex rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 outline-none transition hover:bg-sky-100 hover:text-sky-800 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+						>
+							#{tag}
+						</Link>
 					</li>
 				))}
 			</ul>
