@@ -57,7 +57,7 @@ export default async function Home({ searchParams }: HomeProps) {
 								ノート一覧
 							</h1>
 							<p className="mt-3 max-w-xl text-sm leading-6 text-slate-600 sm:text-base">
-								学習内容や設定手順、トラブル対応の記録をまとめています。
+								AI開発ツールやWeb技術について、調べたことや試したことをまとめています。
 							</p>
 						</div>
 						<p className="shrink-0 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
