@@ -29,7 +29,7 @@
 
 ### 必要な環境
 
-- Node.js
+- Node.js 22.23.4以降の22系（バージョン指定は`.nvmrc`を参照）
 - npm
 
 ### セットアップ
@@ -37,11 +37,19 @@
 ```sh
 git clone git@github.com:git-yuji/TechNotes.git
 cd TechNotes
+nvm install
+nvm use
 npm install
 npm run dev
 ```
 
 起動後、[http://localhost:3000](http://localhost:3000)を開きます。
+
+`nvm`を使用しない場合も、`.nvmrc`に記載されたNode.jsをインストールしてください。
+[2026年10月21日のNode.jsセキュリティリリース](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases)に対応し、22系の修正版である22.23.4を指定しています。
+GitHub ActionsとCloudflare Workers Buildsは`.nvmrc`を参照します。
+Cloudflare側で`NODE_VERSION`を設定している場合は、そちらも`22.23.4`に更新し、ビルドログのNode.jsバージョンを確認してください。
+Cloudflare Workersの実行環境はNode.js本体ではなく、ここでの指定は開発・ビルド環境に適用されます。
 
 ## ノートの管理
 
