@@ -16,13 +16,13 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
 		<>
 			<TableOfContents headings={headings} />
 			<div
-				className={`markdown-content min-w-0 break-words text-[15px] leading-8 text-slate-700 sm:text-base ${headings.length > 0 ? "mt-8" : ""}`}
+				className={`markdown-content min-w-0 break-words text-[15px] leading-8 text-slate-700 dark:text-slate-300 sm:text-base ${headings.length > 0 ? "mt-8" : ""}`}
 			>
 				<ReactMarkdown
 					remarkPlugins={[remarkGfm]}
 					components={{
 					h1: ({ children }) => (
-						<h1 className="mb-5 mt-10 border-b border-slate-200 pb-3 text-2xl font-bold tracking-tight text-slate-950 first:mt-0 sm:text-3xl">
+						<h1 className="mb-5 mt-10 border-b border-slate-200 pb-3 text-2xl font-bold tracking-tight text-slate-950 first:mt-0 sm:text-3xl dark:border-slate-700 dark:text-slate-50">
 							{children}
 						</h1>
 					),
@@ -32,7 +32,7 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
 						return (
 							<h2
 								id={heading?.id}
-								className="group mb-4 mt-10 scroll-mt-6 border-b border-slate-200 pb-3 text-xl font-bold tracking-tight text-slate-950 first:mt-0 sm:text-2xl"
+								className="group mb-4 mt-10 scroll-mt-6 border-b border-slate-200 pb-3 text-xl font-bold tracking-tight text-slate-950 first:mt-0 sm:text-2xl dark:border-slate-700 dark:text-slate-50"
 							>
 								{children}
 								{heading && <HeadingLink heading={heading} />}
@@ -43,26 +43,26 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
 						const heading = headingsByOffset.get(node?.position?.start.offset ?? -1);
 
 						return (
-							<h3 id={heading?.id} className="group mb-3 mt-8 scroll-mt-6 text-lg font-bold text-slate-900">
+							<h3 id={heading?.id} className="group mb-3 mt-8 scroll-mt-6 text-lg font-bold text-slate-900 dark:text-slate-100">
 								{children}
 								{heading && <HeadingLink heading={heading} />}
 							</h3>
 						);
 					},
 					p: ({ children }) => <p className="my-4">{children}</p>,
-					strong: ({ children }) => <strong className="font-bold text-slate-950">{children}</strong>,
-					ul: ({ children }) => <ul className="my-4 list-disc space-y-1 pl-6 marker:text-sky-600">{children}</ul>,
-					ol: ({ children }) => <ol className="my-4 list-decimal space-y-1 pl-6 marker:font-semibold marker:text-sky-700">{children}</ol>,
+					strong: ({ children }) => <strong className="font-bold text-slate-950 dark:text-slate-50">{children}</strong>,
+					ul: ({ children }) => <ul className="my-4 list-disc space-y-1 pl-6 marker:text-sky-600 dark:marker:text-sky-400">{children}</ul>,
+					ol: ({ children }) => <ol className="my-4 list-decimal space-y-1 pl-6 marker:font-semibold marker:text-sky-700 dark:marker:text-sky-300">{children}</ol>,
 					a: ({ href, children }) => (
 						<a
 							href={href}
-							className="font-medium text-sky-700 underline decoration-sky-300 underline-offset-4 hover:text-sky-900"
+							className="font-medium text-sky-700 underline decoration-sky-300 underline-offset-4 hover:text-sky-900 dark:text-sky-300 dark:decoration-sky-700 dark:hover:text-sky-200"
 						>
 							{children}
 						</a>
 					),
 					blockquote: ({ children }) => (
-						<blockquote className="my-6 rounded-r-lg border-l-4 border-amber-400 bg-amber-50 px-5 py-3 text-amber-950">
+						<blockquote className="my-6 rounded-r-lg border-l-4 border-amber-400 bg-amber-50 px-5 py-3 text-amber-950 dark:bg-amber-950/50 dark:text-amber-100">
 							{children}
 						</blockquote>
 					),
@@ -70,7 +70,7 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
 						className ? (
 							<code className={`${className} block min-w-max`}>{children}</code>
 						) : (
-							<code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[0.9em] font-medium text-slate-800">
+							<code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[0.9em] font-medium text-slate-800 dark:bg-slate-800 dark:text-slate-200">
 								{children}
 							</code>
 						),
@@ -80,17 +80,17 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
 							<table className="w-full min-w-lg border-collapse text-left text-sm">{children}</table>
 						</div>
 					),
-					thead: ({ children }) => <thead className="bg-slate-100 text-slate-900">{children}</thead>,
-					th: ({ children }) => <th className="border border-slate-200 px-4 py-3 font-semibold">{children}</th>,
-					td: ({ children }) => <td className="border border-slate-200 px-4 py-3">{children}</td>,
-					hr: () => <hr className="my-8 border-slate-200" />,
+					thead: ({ children }) => <thead className="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100">{children}</thead>,
+					th: ({ children }) => <th className="border border-slate-200 px-4 py-3 font-semibold dark:border-slate-700">{children}</th>,
+					td: ({ children }) => <td className="border border-slate-200 px-4 py-3 dark:border-slate-700">{children}</td>,
+					hr: () => <hr className="my-8 border-slate-200 dark:border-slate-700" />,
 					img: ({ src, alt }) => (
 						// Markdown内の画像は外部URLを含むため、サイズ最適化を行わず表示します。
 						// eslint-disable-next-line @next/next/no-img-element
 						<img
 							src={src}
 							alt={alt ?? ""}
-							className="my-6 h-auto max-w-full rounded-xl border border-slate-200"
+							className="my-6 h-auto max-w-full rounded-xl border border-slate-200 dark:border-slate-700"
 							loading="lazy"
 						/>
 					),
@@ -107,7 +107,7 @@ function HeadingLink({ heading }: { heading: Pick<MarkdownHeading, "id" | "text"
 	return (
 		<a
 			href={`#${heading.id}`}
-			className="ml-2 inline-block rounded text-slate-300 no-underline opacity-60 transition hover:text-sky-600 hover:opacity-100 focus-visible:text-sky-600 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 sm:opacity-0 sm:group-hover:opacity-100"
+			className="ml-2 inline-block rounded text-slate-300 no-underline opacity-60 transition hover:text-sky-600 hover:opacity-100 focus-visible:text-sky-600 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 sm:opacity-0 sm:group-hover:opacity-100 dark:hover:text-sky-400 dark:focus-visible:text-sky-400 dark:focus-visible:ring-offset-slate-900"
 			aria-label={`${heading.text}へのリンク`}
 			title="この見出しへのリンク"
 		>
