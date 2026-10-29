@@ -14,20 +14,20 @@ const dateFormatter = new Intl.DateTimeFormat("ja-JP", {
 
 export function NoteCard({ note }: NoteCardProps) {
 	return (
-		<article className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-md sm:p-6">
+		<article className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-md sm:p-6 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-sky-600">
 			<div className="mb-5">
 				<Link
 					href={{ pathname: "/", query: { category: note.category } }}
-					className="inline-flex rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700 outline-none transition hover:bg-sky-100 hover:text-sky-900 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+					className="inline-flex rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700 outline-none transition hover:bg-sky-100 hover:text-sky-900 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 dark:bg-sky-950 dark:text-sky-300 dark:hover:bg-sky-900 dark:hover:text-sky-200 dark:focus-visible:ring-offset-slate-900"
 				>
 					{note.category}
 				</Link>
 			</div>
 
-			<h2 className="text-lg font-bold leading-7 tracking-tight text-slate-900 sm:text-xl">
+			<h2 className="text-lg font-bold leading-7 tracking-tight text-slate-900 sm:text-xl dark:text-slate-100">
 				<Link
 					href={`/notes/${note.id}`}
-					className="outline-none transition-colors hover:text-sky-700 focus-visible:rounded focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-4"
+					className="outline-none transition-colors hover:text-sky-700 focus-visible:rounded focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-4 dark:hover:text-sky-300 dark:focus-visible:ring-offset-slate-900"
 				>
 					{note.title}
 				</Link>
@@ -38,7 +38,7 @@ export function NoteCard({ note }: NoteCardProps) {
 					<li key={tag}>
 						<Link
 							href={{ pathname: "/", query: { tag } }}
-							className="inline-flex rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 outline-none transition hover:bg-sky-100 hover:text-sky-800 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+							className="inline-flex rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 outline-none transition hover:bg-sky-100 hover:text-sky-800 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-sky-900 dark:hover:text-sky-200 dark:focus-visible:ring-offset-slate-900"
 						>
 							#{tag}
 						</Link>
@@ -46,14 +46,14 @@ export function NoteCard({ note }: NoteCardProps) {
 				))}
 			</ul>
 
-			<div className="mt-auto flex items-end justify-between gap-4 border-t border-slate-100 pt-5">
-				<p className="text-xs text-slate-500">
-					<span className="block font-medium text-slate-400">更新日</span>
+			<div className="mt-auto flex items-end justify-between gap-4 border-t border-slate-100 pt-5 dark:border-slate-800">
+				<p className="text-xs text-slate-500 dark:text-slate-400">
+					<span className="block font-medium text-slate-400 dark:text-slate-400">更新日</span>
 					<time dateTime={note.updatedAt}>{dateFormatter.format(new Date(`${note.updatedAt}T00:00:00+09:00`))}</time>
 				</p>
 				<Link
 					href={`/notes/${note.id}`}
-					className="inline-flex items-center gap-1 text-sm font-semibold text-sky-700 outline-none transition hover:text-sky-900 focus-visible:rounded focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-4"
+					className="inline-flex items-center gap-1 text-sm font-semibold text-sky-700 outline-none transition hover:text-sky-900 focus-visible:rounded focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-4 dark:text-sky-300 dark:hover:text-sky-200 dark:focus-visible:ring-offset-slate-900"
 					aria-label={`${note.title}の詳細を見る`}
 				>
 					詳細を見る

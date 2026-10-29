@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import { NoteCard } from "@/components/note-card";
 import { categories, type Category } from "@/data/categories";
 import { getAvailableTags, getNotes } from "@/lib/notes";
@@ -31,8 +32,8 @@ export default async function Home({ searchParams }: HomeProps) {
 
 	return (
 		<main className="min-h-screen">
-			<header className="border-b border-slate-200 bg-white">
-				<div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-5 sm:px-8">
+			<header className="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+				<div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-5 sm:px-8">
 					<div className="flex items-center gap-3">
 						<div
 							className="grid size-10 place-items-center rounded-xl bg-sky-700 text-sm font-bold tracking-tight text-white shadow-sm"
@@ -41,10 +42,11 @@ export default async function Home({ searchParams }: HomeProps) {
 							TN
 						</div>
 						<div>
-							<p className="text-lg font-bold tracking-tight text-slate-900">Tech Notes</p>
-							<p className="hidden text-xs text-slate-500 sm:block">技術知識を記録し、必要なときに再利用する</p>
+							<p className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">Tech Notes</p>
+							<p className="hidden text-xs text-slate-500 sm:block dark:text-slate-400">技術知識を記録し、必要なときに再利用する</p>
 						</div>
 					</div>
+					<ThemeSwitcher />
 				</div>
 			</header>
 
@@ -52,21 +54,21 @@ export default async function Home({ searchParams }: HomeProps) {
 				<section aria-labelledby="notes-heading">
 					<div className="mb-7 flex items-end justify-between gap-6">
 						<div>
-							<p className="mb-2 text-sm font-semibold text-sky-700">KNOWLEDGE BASE</p>
-							<h1 id="notes-heading" className="text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+							<p className="mb-2 text-sm font-semibold text-sky-700 dark:text-sky-300">KNOWLEDGE BASE</p>
+							<h1 id="notes-heading" className="text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl dark:text-slate-50">
 								ノート一覧
 							</h1>
-							<p className="mt-3 max-w-xl text-sm leading-6 text-slate-600 sm:text-base">
+							<p className="mt-3 max-w-xl text-sm leading-6 text-slate-600 sm:text-base dark:text-slate-300">
 								AI開発ツールやWeb技術について、調べたことや試したことをまとめています。
 							</p>
 						</div>
-						<p className="shrink-0 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
+						<p className="shrink-0 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
 							{notes.length}件
 						</p>
 					</div>
 
 					<details className="group mb-7" open={hasFilters}>
-						<summary className="flex w-fit cursor-pointer list-none items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 [&::-webkit-details-marker]:hidden">
+						<summary className="flex w-fit cursor-pointer list-none items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 [&::-webkit-details-marker]:hidden dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-sky-600 dark:hover:bg-sky-950 dark:hover:text-sky-200 dark:focus-visible:ring-offset-slate-900">
 							<svg
 								viewBox="0 0 24 24"
 								fill="none"
@@ -80,7 +82,7 @@ export default async function Home({ searchParams }: HomeProps) {
 							</svg>
 							<span>{hasFilters ? "検索条件を変更" : "ノートを検索・絞り込み"}</span>
 							{hasFilters && (
-								<span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-bold text-sky-800">
+								<span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-bold text-sky-800 dark:bg-sky-900 dark:text-sky-200">
 									絞り込み中
 								</span>
 							)}
@@ -98,11 +100,11 @@ export default async function Home({ searchParams }: HomeProps) {
 
 						<form
 							method="get"
-							className="mt-4 grid gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end"
+							className="mt-4 grid gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_auto] md:items-end dark:border-slate-700 dark:bg-slate-900"
 							aria-label="ノートを検索・絞り込み"
 						>
 							<div>
-								<label htmlFor="q" className="block text-sm font-bold text-slate-800">
+								<label htmlFor="q" className="block text-sm font-bold text-slate-800 dark:text-slate-200">
 									キーワード
 								</label>
 								<input
@@ -112,19 +114,19 @@ export default async function Home({ searchParams }: HomeProps) {
 									defaultValue={keyword}
 									maxLength={100}
 									placeholder="タイトル、本文、メモを検索"
-									className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
+									className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-4 focus:ring-sky-100 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:ring-sky-900"
 								/>
 							</div>
 
 							<div>
-								<label htmlFor="category" className="block text-sm font-bold text-slate-800">
+								<label htmlFor="category" className="block text-sm font-bold text-slate-800 dark:text-slate-200">
 									カテゴリ
 								</label>
 								<select
 									id="category"
 									name="category"
 									defaultValue={category ?? ""}
-									className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
+									className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-sky-900"
 								>
 									<option value="">すべて</option>
 									{categories.map((item) => (
@@ -136,14 +138,14 @@ export default async function Home({ searchParams }: HomeProps) {
 							</div>
 
 							<div>
-								<label htmlFor="tag" className="block text-sm font-bold text-slate-800">
+								<label htmlFor="tag" className="block text-sm font-bold text-slate-800 dark:text-slate-200">
 									タグ
 								</label>
 								<select
 									id="tag"
 									name="tag"
 									defaultValue={tag}
-									className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
+									className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-sky-900"
 								>
 									<option value="">すべて</option>
 									{availableTags.map((item) => (
@@ -158,14 +160,14 @@ export default async function Home({ searchParams }: HomeProps) {
 								{hasFilters && (
 									<Link
 										href="/"
-										className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+										className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:focus-visible:ring-offset-slate-900"
 									>
 										解除
 									</Link>
 								)}
 								<button
 									type="submit"
-									className="inline-flex min-h-10 flex-1 items-center justify-center rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+									className="inline-flex min-h-10 flex-1 items-center justify-center rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
 								>
 									検索
 								</button>
@@ -180,11 +182,11 @@ export default async function Home({ searchParams }: HomeProps) {
 							))}
 						</div>
 					) : (
-						<div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center">
-							<h2 className="text-lg font-bold text-slate-900">
+						<div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center dark:border-slate-600 dark:bg-slate-900">
+							<h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
 								{hasFilters ? "条件に一致するノートがありません" : "ノートはまだありません"}
 							</h2>
-							<p className="mt-2 text-sm text-slate-600">
+							<p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
 								{hasFilters
 									? "検索条件を変更するか、条件を解除してもう一度お試しください。"
 									: "最初の技術ノートを作成して、知識を記録しましょう。"}
@@ -192,7 +194,7 @@ export default async function Home({ searchParams }: HomeProps) {
 							{hasFilters ? (
 								<Link
 									href="/"
-									className="mt-6 inline-flex min-h-10 items-center justify-center rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+									className="mt-6 inline-flex min-h-10 items-center justify-center rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
 								>
 									条件を解除する
 								</Link>
@@ -201,7 +203,7 @@ export default async function Home({ searchParams }: HomeProps) {
 									href="https://github.com/git-yuji/TechNotes/tree/main/content/notes"
 									target="_blank"
 									rel="noreferrer"
-									className="mt-6 inline-flex min-h-10 items-center justify-center rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+									className="mt-6 inline-flex min-h-10 items-center justify-center rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
 								>
 									GitHubでノートを追加する
 								</a>

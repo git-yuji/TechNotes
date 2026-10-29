@@ -11,10 +11,10 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
 	return (
 		<nav
-			className="rounded-xl border border-sky-100 bg-sky-50/70 p-5 sm:p-6"
+			className="rounded-xl border border-sky-100 bg-sky-50/70 p-5 sm:p-6 dark:border-sky-900 dark:bg-sky-950/50"
 			aria-labelledby="note-table-of-contents-heading"
 		>
-			<p id="note-table-of-contents-heading" className="text-sm font-bold text-slate-900">
+			<p id="note-table-of-contents-heading" className="text-sm font-bold text-slate-900 dark:text-slate-100">
 				目次
 			</p>
 			<ul className="mt-3 space-y-1.5 text-sm leading-6">
@@ -25,7 +25,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 					>
 						<a
 							href={`#${heading.id}`}
-							className="inline-block rounded text-slate-600 transition hover:text-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:ring-offset-sky-50"
+							className="inline-block rounded text-slate-600 transition hover:text-sky-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:ring-offset-sky-50 dark:text-slate-300 dark:hover:text-sky-200 dark:focus-visible:ring-offset-slate-900 dark:focus-visible:ring-offset-sky-950"
 						>
 							{heading.text}
 						</a>
