@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import { notFound } from "next/navigation";
 import { MarkdownContent } from "@/components/markdown-content";
 import { getNoteById, getNoteIds } from "@/lib/notes";
@@ -52,11 +53,11 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
 
 	return (
 		<main className="min-h-screen">
-			<header className="border-b border-slate-200 bg-white">
-				<div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-5 py-5 sm:px-8">
+			<header className="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+				<div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-4 px-5 py-5 sm:px-8">
 					<Link
 						href="/"
-						className="flex items-center gap-3 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-4"
+						className="flex items-center gap-3 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-4 dark:focus-visible:ring-offset-slate-900"
 					>
 						<span
 							className="grid size-10 place-items-center rounded-xl bg-sky-700 text-sm font-bold tracking-tight text-white shadow-sm"
@@ -64,37 +65,40 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
 						>
 							TN
 						</span>
-						<span className="font-bold tracking-tight text-slate-900">Tech Notes</span>
+						<span className="font-bold tracking-tight text-slate-900 dark:text-slate-100">Tech Notes</span>
 					</Link>
-					<a
-						href={`https://github.com/git-yuji/TechNotes/edit/main/${note.sourceFile}`}
-						target="_blank"
-						rel="noreferrer"
-						className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-center text-xs font-semibold text-slate-700 shadow-sm transition hover:border-sky-300 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 sm:px-4 sm:text-sm"
-					>
-						GitHubで編集
-					</a>
+					<div className="flex flex-wrap items-center gap-3">
+						<ThemeSwitcher />
+						<a
+							href={`https://github.com/git-yuji/TechNotes/edit/main/${note.sourceFile}`}
+							target="_blank"
+							rel="noreferrer"
+							className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-center text-xs font-semibold text-slate-700 shadow-sm transition hover:border-sky-300 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 sm:px-4 sm:text-sm dark:border-slate-600 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-sky-600 dark:hover:text-sky-300 dark:focus-visible:ring-offset-slate-900"
+						>
+							GitHubで編集
+						</a>
+					</div>
 				</div>
 			</header>
 
 			<div className="mx-auto max-w-4xl px-5 py-8 sm:px-8 sm:py-12">
 				<Link
 					href="/"
-					className="inline-flex items-center gap-2 text-sm font-semibold text-sky-700 transition hover:text-sky-900 focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-4"
+					className="inline-flex items-center gap-2 text-sm font-semibold text-sky-700 transition hover:text-sky-900 focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-4 dark:text-sky-300 dark:hover:text-sky-200 dark:focus-visible:ring-offset-slate-900"
 				>
 					<span aria-hidden="true">←</span>
 					ノート一覧へ戻る
 				</Link>
 
 				<article className="mt-7">
-					<header className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+					<header className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 dark:border-slate-700 dark:bg-slate-900">
 						<Link
 							href={{ pathname: "/", query: { category: note.category } }}
-							className="inline-flex rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700 outline-none transition hover:bg-sky-100 hover:text-sky-900 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+							className="inline-flex rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700 outline-none transition hover:bg-sky-100 hover:text-sky-900 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 dark:bg-sky-950 dark:text-sky-300 dark:hover:bg-sky-900 dark:hover:text-sky-200 dark:focus-visible:ring-offset-slate-900"
 						>
 							{note.category}
 						</Link>
-						<h1 className="mt-5 text-3xl font-bold leading-tight tracking-tight text-slate-950 sm:text-4xl">
+						<h1 className="mt-5 text-3xl font-bold leading-tight tracking-tight text-slate-950 sm:text-4xl dark:text-slate-50">
 							{note.title}
 						</h1>
 
@@ -103,7 +107,7 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
 								<li key={tag}>
 									<Link
 										href={{ pathname: "/", query: { tag } }}
-										className="inline-flex rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 outline-none transition hover:bg-sky-100 hover:text-sky-800 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+										className="inline-flex rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 outline-none transition hover:bg-sky-100 hover:text-sky-800 focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-sky-900 dark:hover:text-sky-200 dark:focus-visible:ring-offset-slate-900"
 									>
 										#{tag}
 									</Link>
@@ -111,32 +115,32 @@ export default async function NoteDetailPage({ params }: NoteDetailPageProps) {
 							))}
 						</ul>
 
-						<dl className="mt-7 flex flex-wrap gap-x-8 gap-y-3 border-t border-slate-100 pt-5 text-sm">
+						<dl className="mt-7 flex flex-wrap gap-x-8 gap-y-3 border-t border-slate-100 pt-5 text-sm dark:border-slate-800">
 							<div>
-								<dt className="text-xs font-medium text-slate-400">作成日</dt>
-								<dd className="mt-1 text-slate-600">
+								<dt className="text-xs font-medium text-slate-400 dark:text-slate-400">作成日</dt>
+								<dd className="mt-1 text-slate-600 dark:text-slate-300">
 									<time dateTime={note.createdAt}>{formatDate(note.createdAt)}</time>
 								</dd>
 							</div>
 							<div>
-								<dt className="text-xs font-medium text-slate-400">更新日</dt>
-								<dd className="mt-1 text-slate-600">
+								<dt className="text-xs font-medium text-slate-400 dark:text-slate-400">更新日</dt>
+								<dd className="mt-1 text-slate-600 dark:text-slate-300">
 									<time dateTime={note.updatedAt}>{formatDate(note.updatedAt)}</time>
 								</dd>
 							</div>
 						</dl>
 					</header>
 
-					<section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" aria-label="本文">
+					<section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 dark:border-slate-700 dark:bg-slate-900" aria-label="本文">
 						<MarkdownContent content={note.content} />
 					</section>
 
 					{note.memo && (
-						<aside className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-7" aria-labelledby="memo-heading">
-							<h2 id="memo-heading" className="text-sm font-bold text-amber-950">
+						<aside className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-7 dark:border-amber-800 dark:bg-amber-950/50" aria-labelledby="memo-heading">
+							<h2 id="memo-heading" className="text-sm font-bold text-amber-950 dark:text-amber-100">
 								メモ
 							</h2>
-							<p className="mt-2 text-sm leading-7 text-amber-900">{note.memo}</p>
+							<p className="mt-2 text-sm leading-7 text-amber-900 dark:text-amber-200">{note.memo}</p>
 						</aside>
 					)}
 				</article>
