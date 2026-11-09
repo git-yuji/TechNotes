@@ -2,8 +2,8 @@
 title: Facetとは？AIとSpacesを備えたMac向けブラウザー
 category: 学習
 tags: ["Facet", "ブラウザー", "macOS", "AI", "Chrome拡張機能", "Apple Intelligence"]
-createdAt: 2026-11-02
-updatedAt: 2026-11-02
+createdAt: 2026-11-09
+updatedAt: 2026-11-09
 memo: Mac向けブラウザーFacetについて、Liquid Glassのデザイン、AI機能、Spaces、Chrome拡張機能への対応と導入前の確認点をまとめる。
 ---
 
