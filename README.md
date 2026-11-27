@@ -120,6 +120,10 @@ npm run build
 
 生成された`src/generated/notes.ts`はGit管理の対象外です。`npm install`、`npm run dev`、`npm run build`の実行時にも自動生成されます。
 
+## 依存関係の更新
+
+依存関係の更新はDependabotで管理しています。`.github/dependabot.yml` の設定により、npmとGitHub Actionsの更新を毎週月曜9時（日本時間）にチェックし、更新があればPRが作成されます。同時に開くPRは最大5件までで、更新ごとに個別のPRが作成されます。
+
 ## ディレクトリ構成
 
 ```text
