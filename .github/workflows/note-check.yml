@@ -32,3 +32,6 @@ jobs:
 
       - name: ノート詳細ページを検証
         run: npm run notes:check-routes
+
+      - name: 本番ビルドを確認
+        run: npm run build
