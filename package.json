@@ -12,7 +12,7 @@
     "prebuild": "node scripts/generate-notes.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "notes:generate": "node scripts/generate-notes.mjs",
     "deploy": "npm run notes:generate && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "upload": "npm run notes:generate && opennextjs-cloudflare build && opennextjs-cloudflare upload",
